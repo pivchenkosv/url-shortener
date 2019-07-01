@@ -5,7 +5,7 @@ install: composer install
 services:
   - postgresql
 before_script:
-  - psql -c 'create database urlShortener;' -U homestead
+  - psql -c 'create database urlShortener;' -U root
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
