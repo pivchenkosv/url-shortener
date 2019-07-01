@@ -6,3 +6,5 @@ generate-key:
 	composer run post-create-project-cmd
 codesniffer:
 	composer run codesniffer
+migration:
+	php artisan migrate
