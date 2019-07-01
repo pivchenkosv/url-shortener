@@ -16,7 +16,13 @@
                 />
                 <button type='submit'
                         class='btn btn-primary float-right'
-                >Create</button>
+                >Create
+                </button>
+                @if($errors->link->first())
+                    <div class="alert alert-danger small py-0" role="alert">
+                        {{$errors->link->first()}}
+                    </div>
+                @endif
             </div>
         </form>
     </div>

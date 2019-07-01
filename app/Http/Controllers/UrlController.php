@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use function getShortUrlById;
 use function getUrlIdentifier;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class UrlController extends Controller
 {
@@ -17,8 +18,20 @@ class UrlController extends Controller
      */
     public function index(Request $request)
     {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'link' => 'exists:links,code'
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect('/')
+                ->withErrors($validator, 'link')
+                ->withInput();
+        }
         if ($request->has('link')) {
-            $link = Link::whereCode($request->input('link'))->first();
+            $code = $request->input('link');
+            $link = Link::where(DB::raw('BINARY `code`'), $code)->first();
 
             return view(
                 'linkInfo',
@@ -28,9 +41,9 @@ class UrlController extends Controller
                     'usage_quantity' => $link->usage_quantity,
                 ]
             );
-        } else {
-            return view('home');
         }
+
+        return view('home');
     }
 
     /**
@@ -42,25 +55,33 @@ class UrlController extends Controller
      */
     public function createUrl(Request $request)
     {
-        $link = Link::create(
-            [
-                'original_url' => $request->input('link')
-            ]
-        );
+        $request->validate(Link::rules());
+
+        $link = Link::create(['original_url' => $request->input('link')]);
         $link->code = getShortUrlById($link->id);
 
         if ($link->save()) {
-            return redirect()->action('UrlController@index', ['link' => $link->code]);
+            return redirect()
+                ->action('UrlController@index', ['link' => $link->code]);
         }
+
+        return response()->json(
+            [
+                'success' => false,
+                'message' => 'An error occurred!'
+            ],
+            500
+        );
     }
 
     public function redirectToOriginalUrl($url)
     {
         $link = Link::where(DB::raw('BINARY `code`'), $url)->first();
+        $link->increment('usage_quantity');
         if ($link) {
             return redirect($link->original_url);
-        } else {
-            abort(404);
         }
+
+        abort(404);
     }
 }
