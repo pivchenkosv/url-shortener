@@ -41,7 +41,7 @@ export default class App extends Component {
 
         return (
             <div className='container jumbotron card shadow w-50 py-4'>
-                <form method='post'>
+                <form method='post' action='/urls'>
                     <div>
                         <h3 className='modal-title mb-2'>Create your short url</h3>
                     </div>
@@ -49,12 +49,9 @@ export default class App extends Component {
                         <input className="form-control col-9"
                                type='text'
                                name='link'
-                               value={this.state.link}
-                               onChange={(e) => this.onLinkChange(e)}
                         />
                         <button type='button'
                                 className='btn btn-primary float-right'
-                                onClick={this.onSubmit}
                         >Create</button>
                     </div>
                 </form>

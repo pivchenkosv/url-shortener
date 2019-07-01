@@ -6,14 +6,21 @@
 
     <title>urlShortener</title>
 
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
 </head>
 <body>
-<div id="app"></div>
+<div id="header">
+    <div class="modal-header">
+        <a href="/">Url Shortener</a>
+    </div>
+</div>
+<div id="content">
+    @yield('content')
+</div>
 
-<script src="{{ asset('js/app.js') }}" defer></script>
+{{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
 </body>
 </html>

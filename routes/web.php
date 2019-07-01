@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/{any}', function () {
-    return view('welcome');
-})->where('any', '.*');
+Route::get('/', 'UrlController@index');
+Route::post('/urls', 'UrlController@createUrl');
+Route::get('/{url}', 'UrlController@redirectToOriginalUrl');
+
+//Route::get('/{any}', function () {
+//    return view('welcome');
+//})->where('any', '.*');
