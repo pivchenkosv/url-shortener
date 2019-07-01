@@ -3,8 +3,9 @@ php:
   - 7.2.0
 install: composer install
 services:
-  - mysql
+  - postgresql
 before_script:
+  - psql -c 'create database urlShortener;' -U homestead
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
@@ -12,6 +13,7 @@ script:
   - make generate-key
   - make test
   - make codesniffer
+  - make migration
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 addons:

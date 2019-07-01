@@ -31,7 +31,7 @@ class UrlController extends Controller
         }
         if ($request->has('link')) {
             $code = $request->input('link');
-            $link = Link::where(DB::raw('BINARY `code`'), $code)->first();
+            $link = Link::where('code', 'like', '%' . $code . '%')->first();
 
             return view(
                 'linkInfo',
@@ -76,9 +76,9 @@ class UrlController extends Controller
 
     public function redirectToOriginalUrl($url)
     {
-        $link = Link::where(DB::raw('BINARY `code`'), $url)->first();
-        $link->increment('usage_quantity');
+        $link = Link::where('code', 'like', '%' . $url . '%')->first();
         if ($link) {
+            $link->increment('usage_quantity');
             return redirect($link->original_url);
         }
 
