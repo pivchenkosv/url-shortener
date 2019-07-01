@@ -21,7 +21,8 @@ class UrlController extends Controller
             $link = Link::whereCode($request->input('link'))->first();
 
             return view(
-                'linkInfo', [
+                'linkInfo',
+                [
                     'shortUrl' => $link->code,
                     'originalUrl' => $link->original_url,
                     'usage_quantity' => $link->usage_quantity,
