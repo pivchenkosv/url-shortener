@@ -13,6 +13,5 @@ script:
   - make generate-key
   - make test
   - make codesniffer
-  - bundle exec rspec
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
