@@ -18,17 +18,8 @@ class UrlController extends Controller
 {
     public function index(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'link' => 'exists:links,code'
-            ]
-        );
-        if ($validator->fails()) {
-            return redirect('/')
-                ->withErrors($validator, 'link')
-                ->withInput();
-        }
+        $request->validate(['link' => 'exists:links,code']);
+
         if ($request->has('link')) {
             $code = $request->input('link');
             $link = Link::where('code', 'like', '%' . $code . '%')->first();
@@ -83,12 +74,13 @@ class UrlController extends Controller
      */
     public function redirectToOriginalUrl($code)
     {
-        $link = Link::where('code', 'like', '%' . $url . '%')->first();
+        $link = Link::where('code', 'like', '%' . $code . '%')->first();
+
         if ($link) {
             $link->increment('usage_quantity');
             return redirect($link->original_url);
         }
 
-        abort(404);
+        return redirect('/')->withErrors(['Url expired or does not exist.']);
     }
 }
