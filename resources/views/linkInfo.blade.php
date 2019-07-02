@@ -4,7 +4,7 @@
 
     <div class='container jumbotron card shadow w-25 py-4 my-4'>
         <div class='my-3 info' id='info'>
-            <p>Short URL:&nbsp; {{'shourl.loc/' . $link->code}}</p>
+            <p>Short URL:&nbsp; {{env('APP_URL', 'shourl.loc/') . $link->code}}</p>
             <p>Original URL:&nbsp; {{$link->original_url}}</p>
             <p>Usage quantity:&nbsp; {{$link->usage_quantity ?? 0}}</p>
         </div>
