@@ -3,19 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Link;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use function getShortUrlById;
-use function getUrlIdentifier;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Routing\Redirector;
 
+/**
+ * Class UrlController
+ *
+ * @package App\Http\Controllers
+ */
 class UrlController extends Controller
 {
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function index(Request $request)
     {
         $validator = Validator::make(
@@ -51,7 +51,7 @@ class UrlController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function createUrl(Request $request)
     {
@@ -74,7 +74,14 @@ class UrlController extends Controller
         );
     }
 
-    public function redirectToOriginalUrl($url)
+    /**
+     * Redirects to the original URL using short URL.
+     *
+     * @param string $code Short URL code
+     *
+     * @return RedirectResponse|Redirector
+     */
+    public function redirectToOriginalUrl($code)
     {
         $link = Link::where('code', 'like', '%' . $url . '%')->first();
         if ($link) {
