@@ -18,9 +18,9 @@
                         class='btn btn-primary float-right'
                 >Create
                 </button>
-                @if($errors->link->first())
-                    <div class="alert alert-danger small py-0" role="alert">
-                        {{$errors->link->first()}}
+                @if($errors->first())
+                    <div class="alert alert-danger small py-0 mt-1" role="alert">
+                        {{$errors->first()}}
                     </div>
                 @endif
             </div>

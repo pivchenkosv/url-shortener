@@ -24,14 +24,7 @@ class UrlController extends Controller
             $code = $request->input('link');
             $link = Link::where('code', 'like', '%' . $code . '%')->first();
 
-            return view(
-                'linkInfo',
-                [
-                    'shortUrl' => $link->code,
-                    'originalUrl' => $link->original_url,
-                    'usage_quantity' => $link->usage_quantity,
-                ]
-            );
+            return view('linkInfo', compact('link'));
         }
 
         return view('home');
