@@ -41,7 +41,30 @@ class UrlController extends Controller
     {
         $request->validate(Link::rules());
 
-        $link = Link::create(['original_url' => $request->input('link')]);
+        $pattern = "/^(https?:\/\/)/";
+
+        $original_url = preg_replace($pattern, '', $request->input('link'));
+
+        $link = Link::whereIn(
+            'original_url',
+            [
+                $original_url,
+                'http://' . $original_url,
+                'https://' . $original_url,
+            ]
+        )->first();
+
+        if ($link) {
+            return redirect()
+                ->action('UrlController@index', ['link' => $link->code]);
+        }
+
+        $original_url = preg_match($pattern, $request->input('link')) ?
+            $request->input('link') :
+            'http://' . $request->input('link');
+
+
+        $link = Link::create(['original_url' => $original_url]);
         $link->code = getShortUrlById($link->id);
 
         if ($link->save()) {
@@ -67,11 +90,17 @@ class UrlController extends Controller
      */
     public function redirectToOriginalUrl($code)
     {
-        $link = Link::where('code', 'like', '%' . $code . '%')->first();
+        $link = Link::where('code', 'like', '%' . $code . '%')->get()->first();
 
         if ($link) {
+            $pattern = "/^(https?:\/\/)/";
+            $original_url = preg_match($pattern, $link->original_url) ?
+                $link->original_url :
+                'http://' . $link->original_url;
+
             $link->increment('usage_quantity');
-            return redirect($link->original_url);
+
+            return redirect($original_url);
         }
 
         return redirect('/')->withErrors(['Url expired or does not exist.']);
