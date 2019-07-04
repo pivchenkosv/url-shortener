@@ -64,7 +64,7 @@ class UrlController extends Controller
 
 
         $link = Link::create(['original_url' => $original_url]);
-        $link->code = getShortUrlById($link->id);
+        $link->code = $this->getShortUrlById($link->id);
 
         if ($link->save()) {
             return redirect()
@@ -112,16 +112,15 @@ class UrlController extends Controller
      *
      * @return string
      */
-    function getShortUrlById($id)
+    private function getShortUrlById($id)
     {
         $map = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         $shorturl = '';
 
-        while ($id)
-        {
-            $shorturl = $shorturl . $map[$id%62];
-            $id = floor($id/62);
+        while ($id) {
+            $shorturl = $shorturl . $map[$id % 62];
+            $id = floor($id / 62);
         }
 
         $shorturl = strrev($shorturl);

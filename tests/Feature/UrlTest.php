@@ -3,12 +3,16 @@
 namespace Tests\Feature;
 
 use App\Models\Link;
+use Illuminate\Contracts\Session\Session;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UrlTest extends TestCase
 {
+    use WithoutMiddleware;
+
     /**
      * Test asserts that short url has been created
      * and user is redirected to the page with short url info.
@@ -17,9 +21,14 @@ class UrlTest extends TestCase
      */
     public function testShouldCreateShortUrl()
     {
-        $response = $this->post('/urls', ['link' => 'www.example.com']);
-        $this->assertDatabaseHas('links', ['original_url' => 'www.example.com']);
-        $link = Link::whereOriginalUrl('www.example.com')->latest('id')->first();
+        $response = $this->post(
+            '/urls',
+            [
+                'link' => 'example.com',
+            ]
+        );
+        $this->assertDatabaseHas('links', ['original_url' => 'http://example.com']);
+        $link = Link::whereOriginalUrl('http://example.com')->latest('id')->first();
 
         $response->assertRedirect('/?link=' . $link->code);
     }
