@@ -6,7 +6,8 @@ services:
   - postgresql
 before_script:
   - cp .env.travis .env
-  - psql -c 'create database urlShortener;' -U postgres
+  - psql -c 'create database urlshortener;' -U postgres
+  - psql -c "CREATE USER homestead WITH PASSWORD 'secret';" -U postgres
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build

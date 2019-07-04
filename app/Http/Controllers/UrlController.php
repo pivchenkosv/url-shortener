@@ -6,7 +6,6 @@ use App\Models\Link;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use function getShortUrlById;
 use Illuminate\Routing\Redirector;
 
 /**
@@ -104,5 +103,29 @@ class UrlController extends Controller
         }
 
         return redirect('/')->withErrors(['Url expired or does not exist.']);
+    }
+
+    /**
+     * Transforms URL identifier to short URL
+     *
+     * @param integer $id Original URL identifier from database
+     *
+     * @return string
+     */
+    function getShortUrlById($id)
+    {
+        $map = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        $shorturl = '';
+
+        while ($id)
+        {
+            $shorturl = $shorturl . $map[$id%62];
+            $id = floor($id/62);
+        }
+
+        $shorturl = strrev($shorturl);
+
+        return $shorturl;
     }
 }

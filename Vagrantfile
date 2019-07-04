@@ -1,6 +1,23 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+$provision_script = <<PROVISION
+    apt-get -y update
+    apt-get install ifupdown -y
+PROVISION
+
+Vagrant.configure("2") do |config|
+    config.vm.provision "shell", inline: $provision_script
+    config.vm.provider "virtualbox" do |vb|
+        vb.gui = false
+        vb.memory = "1024"
+    end
+
+    config.vm.box = "generic/ubuntu1710"
+    config.vm.network "forwarded_port", guest: 80, host: 8080, auto_correct: false
+    config.vm.network "private_network", ip: "192.168.37.200"
+end
+
 require 'json'
 require 'yaml'
 
