@@ -30,6 +30,6 @@ class UrlTest extends TestCase
         $this->assertDatabaseHas('links', ['original_url' => 'http://example.com']);
         $link = Link::whereOriginalUrl('http://example.com')->latest('id')->first();
 
-        $response->assertRedirect('/?link=' . $link->code);
+        $response->assertRedirect('/urls/' . $link->id);
     }
 }

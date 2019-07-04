@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Url;
 use App\Models\Link;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -15,47 +16,30 @@ use Illuminate\Routing\Redirector;
  */
 class UrlController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $request->validate(['link' => 'exists:links,code']);
-
-        if ($request->has('link')) {
-            $code = $request->input('link');
-            $link = Link::where('code', 'like', '%' . $code . '%')->first();
-
-            return view('linkInfo', compact('link'));
-        }
-
         return view('home');
     }
 
-    /**
-     * Generates short URL
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function createUrl(Request $request)
+    public function show($url)
     {
-        $request->validate(Link::rules());
+        $link = Link::findOrFail($url);
 
-        $pattern = "/^(https?:\/\/)/";
+        return view('linkInfo', compact('link'));
+    }
 
-        $original_url = preg_replace($pattern, '', $request->input('link'));
+    public function store(Url $request)
+    {
+        $request->validated();
 
-        $link = Link::whereIn(
-            'original_url',
-            [
-                $original_url,
-                'http://' . $original_url,
-                'https://' . $original_url,
-            ]
-        )->first();
+        $pattern = "/^(https?:\/\/)|(www.)/";
 
-        if ($link) {
-            return redirect()
-                ->action('UrlController@index', ['link' => $link->code]);
+        $original_url = preg_replace($pattern, 'http://', $request->input('link'));
+
+        $url = Link::whereOriginalUrl('http://' . $original_url)->first();
+
+        if ($url) {
+            return redirect(route('urls.show', $url));
         }
 
         $original_url = preg_match($pattern, $request->input('link')) ?
@@ -63,12 +47,11 @@ class UrlController extends Controller
             'http://' . $request->input('link');
 
 
-        $link = Link::create(['original_url' => $original_url]);
-        $link->code = $this->getShortUrlById($link->id);
+        $url = Link::create(['original_url' => $original_url]);
+        $url->code = getShortUrlById($url->id);
 
-        if ($link->save()) {
-            return redirect()
-                ->action('UrlController@index', ['link' => $link->code]);
+        if ($url->save()) {
+            return redirect(route('urls.show', $url));
         }
 
         return response()->json(
@@ -80,51 +63,11 @@ class UrlController extends Controller
         );
     }
 
-    /**
-     * Redirects to the original URL using short URL.
-     *
-     * @param string $code Short URL code
-     *
-     * @return RedirectResponse|Redirector
-     */
-    public function redirectToOriginalUrl($code)
+    public function redirectUrl($code)
     {
-        $link = Link::where('code', 'like', '%' . $code . '%')->get()->first();
+        $link = Link::where('code', 'like', '%' . $code . '%')->firstOrFail();
+        $link->increment('usage_quantity');
 
-        if ($link) {
-            $pattern = "/^(https?:\/\/)/";
-            $original_url = preg_match($pattern, $link->original_url) ?
-                $link->original_url :
-                'http://' . $link->original_url;
-
-            $link->increment('usage_quantity');
-
-            return redirect($original_url);
-        }
-
-        return redirect('/')->withErrors(['Url expired or does not exist.']);
-    }
-
-    /**
-     * Transforms URL identifier to short URL
-     *
-     * @param integer $id Original URL identifier from database
-     *
-     * @return string
-     */
-    private function getShortUrlById($id)
-    {
-        $map = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-        $shorturl = '';
-
-        while ($id) {
-            $shorturl = $shorturl . $map[$id % 62];
-            $id = floor($id / 62);
-        }
-
-        $shorturl = strrev($shorturl);
-
-        return $shorturl;
+        return redirect($link->original_url);
     }
 }

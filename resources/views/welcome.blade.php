@@ -15,7 +15,7 @@
 <body>
 <div id="header">
     <div class="modal-header">
-        <a href="/">Url Shortener</a>
+        <a href={{route('urls.index')}}>Url Shortener</a>
     </div>
 </div>
 <div id="content">

@@ -12,8 +12,7 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "squizlabs/php_codesniffer": "^3.4",
-        "stanislau/url-shortener": "^1.0"
+        "squizlabs/php_codesniffer": "^3.4"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -41,6 +40,9 @@
         "classmap": [
             "database/seeds",
             "database/factories"
+        ],
+        "files": [
+            "app/Helpers/helpers.php"
         ]
     },
     "autoload-dev": {

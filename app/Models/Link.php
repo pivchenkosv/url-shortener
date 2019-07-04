@@ -14,11 +14,4 @@ class Link extends Model
     protected $fillable = ['original_url'];
 
     public $timestamps = false;
-
-    public static function rules()
-    {
-        return [
-            'link' => 'required|max:255'
-        ];
-    }
 }

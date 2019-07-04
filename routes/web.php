@@ -11,10 +11,9 @@
 |
 */
 
-Route::get('/', 'UrlController@index');
-Route::post('/urls', 'UrlController@createUrl');
-Route::get('/{code}', 'UrlController@redirectToOriginalUrl');
-
-//Route::get('/{any}', function () {
-//    return view('welcome');
-//})->where('any', '.*');
+Route::resource('urls', 'UrlController');
+//
+//Route::get('/urls/{code}', 'UrlController@showInfo');
+//Route::get('/', 'UrlController@index');
+//Route::post('/urls', 'UrlController@store');
+Route::get('/{code}', 'UrlController@redirectUrl');
