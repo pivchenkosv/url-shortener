@@ -9,7 +9,7 @@ class RoutingTest extends TestCase
 {
     public function testUrlIndex()
     {
-        $this->get('/urls')->assertOk();
+        $this->get(route('urls.index'))->assertOk();
     }
 
     public function testUrlShow()
@@ -22,7 +22,7 @@ class RoutingTest extends TestCase
         $url->code = getShortUrlById($url->id);
         $url->save();
 
-        $this->get('/urls/1')->assertOk();
+        $this->get(route('urls.show', ['url' => 1]))->assertOk();
     }
 
     public function testRedirectUrl()

@@ -19,7 +19,7 @@ class UrlTest extends TestCase
     public function testShouldCreateShortUrl()
     {
         $response = $this->post(
-            '/urls',
+            route('urls.store'),
             [
                 'link' => 'http://example.com',
             ]
@@ -27,27 +27,27 @@ class UrlTest extends TestCase
         $this->assertDatabaseHas('links', ['original_url' => 'http://example.com']);
         $link = Link::whereOriginalUrl('http://example.com')->first();
 
-        $response->assertRedirect('/urls/' . $link->id);
+        $response->assertRedirect(route('urls.show', ['url' => $link->id]));
     }
 
     public function testReturnsErrorMessage()
     {
         $this->post(
-            '/urls',
+            route('urls.store'),
             [
                 'link' => 'example.com',
             ]
         )->assertSessionHasErrors('link');
 
         $this->post(
-            '/urls',
+            route('urls.store'),
             [
                 'link' => 'qwerty',
             ]
         )->assertSessionHasErrors('link');
 
         $this->post(
-            '/urls',
+            route('urls.store'),
             [
                 'link' => 'http://https://example.com',
             ]
