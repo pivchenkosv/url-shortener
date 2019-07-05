@@ -14,9 +14,7 @@
 </head>
 <body>
 <div id="header">
-    <div class="modal-header">
-        <a href={{route('urls.index')}}>Url Shortener</a>
-    </div>
+    @include('header')
 </div>
 <div id="content">
     @yield('content')
