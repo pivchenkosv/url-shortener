@@ -3,11 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Link;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UrlTest extends TestCase
 {
