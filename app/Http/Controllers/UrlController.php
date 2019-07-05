@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\CheckUrl;
-use App\Http\Requests\Url;
-use App\Models\Link;
+use App\Http\Requests\UrlFormRequest;
+use App\Models\Url;
 
 /**
  * Class UrlController
@@ -18,20 +17,16 @@ class UrlController extends Controller
         return view('home');
     }
 
-    public function show($url)
+    public function show(Url $url)
     {
-        $link = Link::findOrFail($url);
-
-        return view('linkInfo', compact('link'));
+        return view('linkInfo', compact('url'));
     }
 
-    public function store(Url $request)
+    public function store(UrlFormRequest $request)
     {
-        $request->validated();
-
         $original_url = $request->input('link');
 
-        $url = Link::whereOriginalUrl($original_url)->firstOrCreate(
+        $url = Url::whereOriginalUrl($original_url)->firstOrCreate(
             [
                 'original_url' => $original_url,
             ]
@@ -40,11 +35,10 @@ class UrlController extends Controller
         return redirect(route('urls.show', $url));
     }
 
-    public function redirectUrl($code)
+    public function redirectUrl(Url $url)
     {
-        $link = Link::where('code', 'like', '%' . $code . '%')->firstOrFail();
-        $link->increment('usage_quantity');
+        $url->increment('usage_quantity');
 
-        return redirect($link->original_url);
+        return redirect($url->original_url);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Link;
+use App\Models\Url;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
@@ -25,7 +25,7 @@ class UrlTest extends TestCase
             ]
         );
         $this->assertDatabaseHas('links', ['original_url' => 'http://example.com']);
-        $link = Link::whereOriginalUrl('http://example.com')->first();
+        $link = Url::whereOriginalUrl('http://example.com')->first();
 
         $response->assertRedirect(route('urls.show', ['url' => $link->id]));
     }

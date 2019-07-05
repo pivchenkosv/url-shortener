@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Link;
+use App\Models\Url;
 
 class LinkObserver
 {
@@ -12,7 +12,7 @@ class LinkObserver
      * @param  \App\Link  $link
      * @return void
      */
-    public function created(Link $link)
+    public function created(Url $link)
     {
         $link->code = getShortUrlById($link->id);
         $link->save();
@@ -24,7 +24,7 @@ class LinkObserver
      * @param  \App\Link  $link
      * @return void
      */
-    public function updated(Link $link)
+    public function updated(Url $link)
     {
         //
     }
@@ -35,7 +35,7 @@ class LinkObserver
      * @param  \App\Link  $link
      * @return void
      */
-    public function deleted(Link $link)
+    public function deleted(Url $link)
     {
         //
     }
@@ -46,7 +46,7 @@ class LinkObserver
      * @param  \App\Link  $link
      * @return void
      */
-    public function restored(Link $link)
+    public function restored(Url $link)
     {
         //
     }
@@ -57,7 +57,7 @@ class LinkObserver
      * @param  \App\Link  $link
      * @return void
      */
-    public function forceDeleted(Link $link)
+    public function forceDeleted(Url $link)
     {
         //
     }

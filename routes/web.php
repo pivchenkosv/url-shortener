@@ -11,8 +11,7 @@
 |
 */
 
-use App\Http\Middleware\CheckUrl;
-
+Route::get('/', 'UrlController@index');
 Route::resource('urls', 'UrlController');
-Route::post('urls', 'UrlController@store')->name('urls.store')->middleware(CheckUrl::class);
+Route::post('urls', 'UrlController@store')->name('urls.store')->middleware('handled');
 Route::get('/{code}', 'UrlController@redirectUrl');

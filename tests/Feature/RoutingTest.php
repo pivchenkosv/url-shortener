@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Link;
+use App\Models\Url;
 use Tests\TestCase;
 
 class RoutingTest extends TestCase
@@ -14,7 +14,7 @@ class RoutingTest extends TestCase
 
     public function testUrlShow()
     {
-        $url = Link::firstOrCreate(
+        $url = Url::firstOrCreate(
             [
                 'original_url' => 'http://example.com',
             ]
@@ -28,7 +28,7 @@ class RoutingTest extends TestCase
     public function testRedirectUrl()
     {
         $response = $this->get('/b');
-        $link = Link::whereCode('b')->first();
+        $link = Url::whereCode('b')->first();
         $response->assertRedirect($link->original_url);
     }
 }
