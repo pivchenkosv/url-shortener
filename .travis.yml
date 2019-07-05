@@ -15,6 +15,6 @@ script:
   - make generate-key
   - make migration
   - make test
-  - make codesniffer
+  - make lint
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
