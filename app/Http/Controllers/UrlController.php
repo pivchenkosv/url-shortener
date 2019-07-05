@@ -5,10 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\CheckUrl;
 use App\Http\Requests\Url;
 use App\Models\Link;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 
 /**
  * Class UrlController
@@ -45,8 +41,6 @@ class UrlController extends Controller
                 'original_url' => $original_url,
             ]
         );
-        $url->code = getShortUrlById($url->id);
-        $url->save();
 
         return redirect(route('urls.show', $url));
     }

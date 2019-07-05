@@ -18,7 +18,3 @@ script:
   - make codesniffer
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-addons:
-  code_climate:
-    repo_token:
-      secure: "LuEo9MH66mKezSd3prn6c+5cQiSYnSJRG4i+OdvEE9kQ3ZUXJRBqKJ7cg9x7MsXLErpVeBbLYzzT+soHqkRkaj2RkaXjwslt1Jge3PKNruNR0EK82Wmb8kEPNUyDeNsF+RQSgQVnHHXQwHD4ZaM/FepRelCuh5Puqx7vtEtrYjFXN6gO7/Cj8jlC+RM99lOTfCc3L6bK4CxQau7gyLgr0H4AKpdmwgyncsEVg76AGk3N6s+Nlx3d690IAweGJnpMbtP5eFTE2uFe4JXu0RKj5bvhxsmiqCKxk9O2zt2VtvBKv2D1kiosIfjWQtoc+dhu4gmyaoksjW3/E1cAxg+cYtoJTAKZay1vQdAAZCH3hGQTZUk78SuLTiiIRIB/M9J/ZZMZnTHsk8HXmfXD57E+r62iKKRBHXda9AWoMCnUmcdqWCp0FHW1fB/7cxy9vamiV0+FfVYZXI851RZUnmtuCr+mbvVEUvmhljmzy9MmNsCuuxSrL7xHPQ2n5hGaz3Z2xHxwKMdT46rtgU1izpauWiM6E+lZWIoY1+ADdvNpF/9Nr9TXxRirdOSq9ck1jKDFAu6bNB/k81EnhHvXUgFaqaMSeN5eZ8IVbyTrfAlzLmXG7qmK16F147d9v4LRHRRpD7QzhDpyXKBAOF7bLbj6zKkm1F+9MF52IkiYzm1RGYI="

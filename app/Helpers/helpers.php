@@ -9,6 +9,8 @@
  * @link     https://github.com/pivchenkosv/url-shortener
  */
 
+const MAP = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
 /**
  * Transforms URL identifier to short URL
  *
@@ -18,12 +20,10 @@
  */
 function getShortUrlById($id)
 {
-    $map = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
     $shorturl = '';
 
     while ($id) {
-        $shorturl = $shorturl . $map[$id % 62];
+        $shorturl = $shorturl . MAP[$id % 62];
         $id = floor($id / 62);
     }
 
