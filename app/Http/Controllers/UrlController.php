@@ -13,11 +13,6 @@ use App\Models\Link;
  */
 class UrlController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(CheckUrl::class)->only('store');
-    }
-
     public function index()
     {
         return view('home');
