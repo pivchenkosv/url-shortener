@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use App\Http\Requests\Url;
+use Closure;
+use Illuminate\Http\Request;
+
+class CheckUrl
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param Request $request
+     * @param \Closure $next
+     * @return mixed
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        $pattern = "/^(https?:\/\/(www\.)?)|(www\.)/";
+        $request->merge(['link' => preg_replace($pattern, 'http://', $request->input('link'))]);
+
+        return $next($request);
+    }
+}

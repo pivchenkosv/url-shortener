@@ -12,8 +12,4 @@
 */
 
 Route::resource('urls', 'UrlController');
-//
-//Route::get('/urls/{code}', 'UrlController@showInfo');
-//Route::get('/', 'UrlController@index');
-//Route::post('/urls', 'UrlController@store');
 Route::get('/{code}', 'UrlController@redirectUrl');

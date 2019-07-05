@@ -24,12 +24,36 @@ class UrlTest extends TestCase
         $response = $this->post(
             '/urls',
             [
-                'link' => 'example.com',
+                'link' => 'http://example.com',
             ]
         );
         $this->assertDatabaseHas('links', ['original_url' => 'http://example.com']);
-        $link = Link::whereOriginalUrl('http://example.com')->latest('id')->first();
+        $link = Link::whereOriginalUrl('http://example.com')->first();
 
         $response->assertRedirect('/urls/' . $link->id);
+    }
+
+    public function testReturnsErrorMessage()
+    {
+        $this->post(
+            '/urls',
+            [
+                'link' => 'example.com',
+            ]
+        )->assertSessionHasErrors('link');
+
+        $this->post(
+            '/urls',
+            [
+                'link' => 'qwerty',
+            ]
+        )->assertSessionHasErrors('link');
+
+        $this->post(
+            '/urls',
+            [
+                'link' => 'http://https://example.com',
+            ]
+        )->assertSessionHasErrors('link');
     }
 }

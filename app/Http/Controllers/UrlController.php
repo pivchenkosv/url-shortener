@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CheckUrl;
 use App\Http\Requests\Url;
 use App\Models\Link;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,11 @@ use Illuminate\Routing\Redirector;
  */
 class UrlController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(CheckUrl::class)->only('store');
+    }
+
     public function index()
     {
         return view('home');
@@ -32,35 +38,17 @@ class UrlController extends Controller
     {
         $request->validated();
 
-        $pattern = "/^(https?:\/\/)|(www.)/";
+        $original_url = $request->input('link');
 
-        $original_url = preg_replace($pattern, 'http://', $request->input('link'));
-
-        $url = Link::whereOriginalUrl('http://' . $original_url)->first();
-
-        if ($url) {
-            return redirect(route('urls.show', $url));
-        }
-
-        $original_url = preg_match($pattern, $request->input('link')) ?
-            $request->input('link') :
-            'http://' . $request->input('link');
-
-
-        $url = Link::create(['original_url' => $original_url]);
-        $url->code = getShortUrlById($url->id);
-
-        if ($url->save()) {
-            return redirect(route('urls.show', $url));
-        }
-
-        return response()->json(
+        $url = Link::whereOriginalUrl($original_url)->firstOrCreate(
             [
-                'success' => false,
-                'message' => 'An error occurred!'
-            ],
-            500
+                'original_url' => $original_url,
+            ]
         );
+        $url->code = getShortUrlById($url->id);
+        $url->save();
+
+        return redirect(route('urls.show', $url));
     }
 
     public function redirectUrl($code)
