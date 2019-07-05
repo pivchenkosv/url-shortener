@@ -16,6 +16,14 @@ class RoutingTest extends TestCase
 
     public function testUrlShow()
     {
+        $url = Link::firstOrCreate(
+            [
+                'original_url' => 'http://example.com',
+            ]
+        );
+        $url->code = getShortUrlById($url->id);
+        $url->save();
+
         $this->get('/urls/1')->assertOk();
     }
 
