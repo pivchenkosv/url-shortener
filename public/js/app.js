@@ -60743,7 +60743,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -66316,12 +66316,11 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container jumbotron card shadow w-50 py-4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        method: "post"
+        method: "post",
+        action: "/urls"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
         className: "modal-title mb-2"
       }, "Create your short url")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -66329,15 +66328,10 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         className: "form-control col-9",
         type: "text",
-        name: "link",
-        value: this.state.link,
-        onChange: function onChange(e) {
-          return _this2.onLinkChange(e);
-        }
+        name: "link"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: "btn btn-primary float-right",
-        onClick: this.onSubmit
+        className: "btn btn-primary float-right"
       }, "Create"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "my-3 info",
         id: "info"
@@ -66398,8 +66392,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _main_components_app__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./main/components/app */ "./resources/js/main/components/app.jsx");
 
 
-
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_main_components_app__WEBPACK_IMPORTED_MODULE_2__["default"], null), document.getElementById('app'));
+ // ReactDOM.render(<App />, document.getElementById('app'));
 
 /***/ }),
 

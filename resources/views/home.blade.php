@@ -18,11 +18,9 @@
                         class='btn btn-primary float-right'
                 >Create
                 </button>
-                @if($errors->first())
-                    <div class="alert alert-danger small py-0 mt-1" role="alert">
-                        {{$errors->first()}}
-                    </div>
-                @endif
+                <div id="message">
+                    @include('flash-message')
+                </div>
             </div>
         </form>
     </div>
