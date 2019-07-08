@@ -21,4 +21,9 @@ class Url extends Model
     protected $fillable = ['original_url'];
 
     public $timestamps = false;
+
+    public function scopeByCode($query, $code)
+    {
+        return $query->where('code', 'like', '%' . $code . '%');
+    }
 }

@@ -26,11 +26,9 @@ class UrlController extends Controller
     {
         $original_url = $request->input('link');
 
-        $url = Url::whereOriginalUrl($original_url)->firstOrCreate(
-            [
+        $url = Url::whereOriginalUrl($original_url)->firstOrCreate([
                 'original_url' => $original_url,
-            ]
-        );
+        ]);
 
         return redirect(route('urls.show', $url));
     }

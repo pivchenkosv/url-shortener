@@ -27,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
 
         Route::bind('code', function ($value) {
-            return Url::where('code', 'like', '%' . $value . '%')->firstOrFail();
+            return Url::byCode($value)->firstOrFail();
         });
     }
 
