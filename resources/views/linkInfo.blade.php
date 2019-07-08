@@ -3,7 +3,7 @@
 @section('content')
 
     <div class='container jumbotron card shadow w-25 py-4 my-4'>
-        <div class='my-3 info' id='info'>
+        <div class='my-3' id='info'>
             <p>Short URL:&nbsp; {{env('APP_URL', 'shourl.loc/') . $url->code}}</p>
             <p>Original URL:&nbsp; {{$url->original_url}}</p>
             <p>Usage quantity:&nbsp; {{$url->usage_quantity ?? 0}}</p>
