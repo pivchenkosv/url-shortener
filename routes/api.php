@@ -17,4 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/urls', 'UrlController@createUrl');
+Route::resource('urls', 'UrlController');
+Route::post('urls', 'UrlController@store')->name('urls.store')->middleware('handled');
+Route::get('/{code}', 'UrlController@redirectUrl');

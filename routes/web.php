@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/{any}', function () {
+    return view('spa');
+})->where('any', '.*');
+
 Route::get('/', 'UrlController@index');
 Route::resource('urls', 'UrlController');
 Route::post('urls', 'UrlController@store')->name('urls.store')->middleware('handled');

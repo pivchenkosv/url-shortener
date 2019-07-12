@@ -14,29 +14,29 @@ class UrlController extends Controller
 {
     public function index()
     {
-        return view('home');
+        return response()->json(['success' => true, 'data' => Url::all()]);
     }
 
     public function show(Url $url)
     {
-        return view('linkInfo', compact('url'));
+        return response()->json(['success' => true, 'data' => $url]);
     }
 
     public function store(UrlFormRequest $request)
     {
-        $original_url = $request->input('link');
+        $original_url = $request->input('original_url');
 
         $url = Url::whereOriginalUrl($original_url)->firstOrCreate([
                 'original_url' => $original_url,
         ]);
 
-        return redirect(route('urls.show', $url));
+        return response()->json(['success' => true, 'data' => $url]);
     }
 
     public function redirectUrl(Url $url)
     {
         $url->increment('usage_quantity');
 
-        return redirect($url->original_url);
+        return response()->json(['success' => true, 'data' => $url]);
     }
 }
