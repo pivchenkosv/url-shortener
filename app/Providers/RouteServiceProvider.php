@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Url;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -26,8 +27,16 @@ class RouteServiceProvider extends ServiceProvider
     {
         parent::boot();
 
+        Route::bind('url', function ($id) {
+            return Cache::remember('urls' . $id, 600, function () use ($id) {
+                return Url::findOrFail($id);
+            });
+        });
+
         Route::bind('code', function ($value) {
-            return Url::byCode($value)->firstOrFail();
+            return Cache::remember('codes' . $value, 600, function () use ($value) {
+                return Url::byCode($value)->firstOrFail();
+            });
         });
     }
 
