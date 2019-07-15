@@ -1,0 +1,21 @@
+.notification {
+    background-color: #ff3f36;
+    padding: 10px;
+    border-radius: 7px;
+    max-width: 200px;
+    position: relative;
+    right: -250px;
+    transition: right 0.5s;
+
+    &__show {
+        right: 0;
+    }
+}
+
+.notification-container {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+
+    overflow: hidden;
+}

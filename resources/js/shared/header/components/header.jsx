@@ -6,7 +6,6 @@ import "./header.scss"
 class Header extends Component {
 
     render() {
-
         return (
             <div className="header">
                 <Link to="/urls">Url Shortener</Link>

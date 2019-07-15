@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Url;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class UrlTest extends TestCase
@@ -21,36 +22,24 @@ class UrlTest extends TestCase
         $response = $this->post(
             route('urls.store'),
             [
-                'link' => 'http://example.com',
+                'original_url' => 'http://example.com',
             ]
         );
         $this->assertDatabaseHas('links', ['original_url' => 'http://example.com']);
         $link = Url::whereOriginalUrl('http://example.com')->first();
 
-        $response->assertRedirect(route('urls.show', ['url' => $link->id]));
+        $response->assertJson(['success' => true]);
     }
 
     public function testReturnsErrorMessage()
     {
-        $this->post(
-            route('urls.store'),
-            [
-                'link' => 'example.com',
-            ]
-        )->assertSessionHasErrors('link');
+        $response = $this->json('POST', '/urls', ['original_url' => 'example.com']);
+        $response->assertJsonValidationErrors('original_url')->assertStatus(422);
 
-        $this->post(
-            route('urls.store'),
-            [
-                'link' => 'qwerty',
-            ]
-        )->assertSessionHasErrors('link');
+        $response = $this->json('POST', '/urls', ['link' => 'www.example']);
+        $response->assertJsonValidationErrors('original_url')->assertStatus(422);
 
-        $this->post(
-            route('urls.store'),
-            [
-                'link' => 'http://https://example.com',
-            ]
-        )->assertSessionHasErrors('link');
+        $response = $this->json('POST', '/urls', ['original_url' => 'http://https://example.com']);
+        $response->assertJsonValidationErrors('original_url')->assertStatus(422);
     }
 }

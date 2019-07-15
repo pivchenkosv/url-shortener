@@ -25,10 +25,10 @@ class RoutingTest extends TestCase
         $this->get(route('urls.show', ['url' => 1]))->assertOk();
     }
 
-    public function testRedirectUrl()
+    public function testFindUrlByCode()
     {
-        $response = $this->get('/b');
+        $response = $this->get('api/b');
         $link = Url::whereCode('b')->first();
-        $response->assertRedirect($link->original_url);
+        $response->assertJson(['success' => true]);
     }
 }

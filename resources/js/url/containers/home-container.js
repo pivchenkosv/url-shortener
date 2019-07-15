@@ -1,13 +1,14 @@
 import {connect} from 'react-redux';
 
 import Home from "../components/home";
-import {createUrlAction} from "../actions/url-actions";
+import {createUrlSagaAction, loadUrlSagaAction} from "../actions/url-actions";
 
 export default connect(
     state => ({
-        urls: state.urls,
+        url: state.urls.get('url'),
     }),
     dispatch => ({
-        loadUrl: id => dispatch(createUrlAction(id))
+        loadUrl: (id, history) => dispatch(loadUrlSagaAction(id, history)),
+        createShortUrl: originalUrl => dispatch(createUrlSagaAction(originalUrl)),
     }),
 )(Home);
