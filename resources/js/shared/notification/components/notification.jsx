@@ -1,24 +1,26 @@
 import React, {Component} from "react";
 
 import "./notification.scss"
+import PropTypes from "prop-types";
 
 class Notification extends Component {
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const { message } = this.props
-        if (message) {
-            let notification = document.getElementById('notification')
-            notification.className = 'notification notification__show'
-        }
-    }
+    // static propTypes = {
+    //     messages: PropTypes.array,
+    // };
 
     render() {
-        const { message } = this.props
+        const { messages } = this.props
         return (
-            <div className='notification-container'>
-                <div id='notification' className="notification">
-                    {message}
-                </div>
+            <div id='notification-container' className='notification-container'>
+                {
+                    messages.map((message, id) => {
+                        return (
+                            <div key={id} className="notification notification__hide">
+                                {message}
+                            </div>
+                        )
+                    })
+                }
             </div>
         );
     }

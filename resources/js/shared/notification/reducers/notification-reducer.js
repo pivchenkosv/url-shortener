@@ -4,8 +4,8 @@ import NotificationRecord from "../records/notification-record";
 
 const NotificationReducer = handleActions({
 
-    [putNotificationAction]: (state, action) => state.set('message', action.payload.message),
-    [removeNotificationAction]: (state) => state.set('message', ''),
+    [putNotificationAction]: (state, action) =>  state.update('messages', messages => messages.push(action.payload.message)),
+    [removeNotificationAction]: (state) => state.update('messages', messages => messages.shift()),
 
 }, new NotificationRecord())
 

@@ -1,7 +1,7 @@
-import { Record } from 'immutable';
+import {List, Record} from 'immutable';
 
 const NotificationRecord = new Record({
-    message: ''
-})
+    messages: new List()
+});
 
 export default NotificationRecord

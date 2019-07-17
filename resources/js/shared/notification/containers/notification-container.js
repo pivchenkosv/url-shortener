@@ -3,7 +3,7 @@ import Notification from '../components/notification'
 
 export default connect(
     state => ({
-        message: state.notifications.get('message')
+        messages: state.notifications.get('messages'),
     }),
     null
 )(Notification);

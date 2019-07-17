@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import './home.scss'
+import PropTypes from "prop-types";
 
 class Home extends Component {
+    static propTypes = {
+        url: PropTypes.object,
+        loadUrl: PropTypes.func,
+        createShortUrl: PropTypes.func
+    };
 
     state = {
         originalUrl: '',
@@ -10,7 +16,6 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.url)
         const {url} = this.props.match.params;
         url && this.props.loadUrl(url, this.props.history);
     }

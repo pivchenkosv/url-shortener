@@ -9336,7 +9336,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, ".notification {\n  background-color: #ff3f36;\n  padding: 10px;\n  border-radius: 7px;\n  max-width: 200px;\n  position: relative;\n  right: -250px;\n  -webkit-transition: right 0.5s;\n  transition: right 0.5s;\n}\n.notification__show {\n  right: 0;\n}\n\n.notification-container {\n  position: fixed;\n  top: 100px;\n  right: 10px;\n  overflow: hidden;\n}", ""]);
+exports.push([module.i, ".notification {\n  background-color: #ff3f36;\n  margin: 5px;\n  border-radius: 7px;\n  max-width: 200px;\n  position: relative;\n  -webkit-transition: all 0.5s;\n  transition: all 0.5s;\n  overflow: hidden;\n}\n.notification__show {\n  max-height: 400px;\n  padding: 10px;\n  right: 0;\n  opacity: 0.8;\n}\n.notification__hide {\n  max-height: 0;\n  padding: 0;\n  right: -260px;\n  opacity: 0;\n}\n\n.notification-container {\n  position: fixed;\n  top: 100px;\n  right: 10px;\n  overflow: hidden;\n}\n\n.no-transition {\n  -webkit-transition: none;\n  transition: none;\n}", ""]);
 
 // exports
 
@@ -79808,6 +79808,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _notification_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./notification.scss */ "./resources/js/shared/notification/components/notification.scss");
 /* harmony import */ var _notification_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_notification_scss__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -79829,6 +79831,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Notification =
 /*#__PURE__*/
 function (_Component) {
@@ -79841,25 +79844,21 @@ function (_Component) {
   }
 
   _createClass(Notification, [{
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps, prevState, snapshot) {
-      var message = this.props.message;
-
-      if (message) {
-        var notification = document.getElementById('notification');
-        notification.className = 'notification notification__show';
-      }
-    }
-  }, {
     key: "render",
+    // static propTypes = {
+    //     messages: PropTypes.array,
+    // };
     value: function render() {
-      var message = this.props.message;
+      var messages = this.props.messages;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "notification-container",
         className: "notification-container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "notification",
-        className: "notification"
-      }, message));
+      }, messages.map(function (message, id) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: id,
+          className: "notification notification__hide"
+        }, message);
+      }));
     }
   }]);
 
@@ -79915,7 +79914,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(function (state) {
   return {
-    message: state.notifications.get('message')
+    messages: state.notifications.get('messages')
   };
 }, null)(_components_notification__WEBPACK_IMPORTED_MODULE_1__["default"]));
 
@@ -79933,7 +79932,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var immutable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immutable */ "./node_modules/immutable/dist/immutable.es.js");
 
 var NotificationRecord = new immutable__WEBPACK_IMPORTED_MODULE_0__["Record"]({
-  message: ''
+  messages: new immutable__WEBPACK_IMPORTED_MODULE_0__["List"]()
 });
 /* harmony default export */ __webpack_exports__["default"] = (NotificationRecord);
 
@@ -79959,9 +79958,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 var NotificationReducer = Object(redux_actions__WEBPACK_IMPORTED_MODULE_0__["handleActions"])((_handleActions = {}, _defineProperty(_handleActions, _actions_notification_actions__WEBPACK_IMPORTED_MODULE_1__["putNotificationAction"], function (state, action) {
-  return state.set('message', action.payload.message);
+  return state.update('messages', function (messages) {
+    return messages.push(action.payload.message);
+  });
 }), _defineProperty(_handleActions, _actions_notification_actions__WEBPACK_IMPORTED_MODULE_1__["removeNotificationAction"], function (state) {
-  return state.set('message', '');
+  return state.update('messages', function (messages) {
+    return messages.shift();
+  });
 }), _handleActions), new _records_notification_record__WEBPACK_IMPORTED_MODULE_2__["default"]());
 /* harmony default export */ __webpack_exports__["default"] = (NotificationReducer);
 
@@ -79994,7 +79997,7 @@ _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(notificat
 
 
 function addNotificationEffectSaga(action) {
-  var notification;
+  var notifications;
   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function addNotificationEffectSaga$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -80005,33 +80008,45 @@ function addNotificationEffectSaga(action) {
 
         case 3:
           _context.next = 5;
-          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(3500);
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(10);
 
         case 5:
-          notification = document.getElementById('notification');
-          notification.className = 'notification';
+          notifications = document.getElementsByClassName('notification__hide');
+          notifications[notifications.length - 1].className = 'notification notification__show';
           _context.next = 9;
-          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(500);
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(3500);
 
         case 9:
-          _context.next = 11;
-          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_notification_actions__WEBPACK_IMPORTED_MODULE_2__["removeNotificationAction"])());
-
-        case 11:
-          _context.next = 16;
-          break;
+          notifications = document.getElementsByClassName('notification__show');
+          notifications[0].className = 'notification notification__hide';
+          _context.next = 13;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(600);
 
         case 13:
-          _context.prev = 13;
+          _context.next = 15;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_actions_notification_actions__WEBPACK_IMPORTED_MODULE_2__["removeNotificationAction"])());
+
+        case 15:
+          _context.next = 17;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["delay"])(10);
+
+        case 17:
+          notifications = document.getElementsByClassName('notification__hide');
+          notifications[notifications.length - 1].className = 'notification notification__show no-transition';
+          _context.next = 24;
+          break;
+
+        case 21:
+          _context.prev = 21;
           _context.t0 = _context["catch"](0);
           console.log(_context.t0);
 
-        case 16:
+        case 24:
         case "end":
           return _context.stop();
       }
     }
-  }, _marked, null, [[0, 13]]);
+  }, _marked, null, [[0, 21]]);
 }
 
 function notificationWatcherSaga() {
@@ -80041,7 +80056,7 @@ function notificationWatcherSaga() {
         case 0:
           _context2.t0 = redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["all"];
           _context2.next = 3;
-          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["takeLatest"])('ADD_NOTIFICATION', addNotificationEffectSaga);
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["takeEvery"])('ADD_NOTIFICATION', addNotificationEffectSaga);
 
         case 3:
           _context2.t1 = _context2.sent;
@@ -80144,6 +80159,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _home_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./home.scss */ "./resources/js/url/components/home.scss");
 /* harmony import */ var _home_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_home_scss__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -80163,6 +80180,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -80211,7 +80229,6 @@ function (_Component) {
   _createClass(Home, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log(this.props.url);
       var url = this.props.match.params.url;
       url && this.props.loadUrl(url, this.props.history);
     }
@@ -80248,6 +80265,12 @@ function (_Component) {
 
   return Home;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+_defineProperty(Home, "propTypes", {
+  url: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object,
+  loadUrl: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func,
+  createShortUrl: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
+});
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
 
@@ -80634,21 +80657,20 @@ function redirectEffectSaga(action) {
           _ref2 = _context2.sent;
           _data = _ref2.data;
           window.location.assign(_data.data.original_url);
-          _context2.next = 15;
+          _context2.next = 14;
           break;
 
         case 8:
           _context2.prev = 8;
           _context2.t0 = _context2["catch"](0);
-          console.log('catch');
           action.payload.history.push('/');
-          _context2.next = 14;
+          _context2.next = 13;
           return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_shared_notification_actions_notification_actions__WEBPACK_IMPORTED_MODULE_4__["addNotification"])('Url was not found. Create a new one!'));
 
-        case 14:
+        case 13:
           console.log(_context2.t0);
 
-        case 15:
+        case 14:
         case "end":
           return _context2.stop();
       }
@@ -80676,15 +80698,16 @@ function createUrlEffectSaga(action) {
         case 7:
           _info = document.getElementById('info');
           _info.className = 'my-3 info info-shown';
-          _context3.next = 14;
+          _context3.next = 15;
           break;
 
         case 11:
           _context3.prev = 11;
           _context3.t0 = _context3["catch"](0);
-          console.log(_context3.t0);
+          _context3.next = 15;
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["put"])(Object(_shared_notification_actions_notification_actions__WEBPACK_IMPORTED_MODULE_4__["addNotification"])(_context3.t0.response.data.errors.original_url[0]));
 
-        case 14:
+        case 15:
         case "end":
           return _context3.stop();
       }
@@ -80704,7 +80727,7 @@ function loadUrlWatcherSaga() {
         case 3:
           _context4.t1 = _context4.sent;
           _context4.next = 6;
-          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["takeLatest"])('CREATE_URL', createUrlEffectSaga);
+          return Object(redux_saga_effects__WEBPACK_IMPORTED_MODULE_1__["takeEvery"])('CREATE_URL', createUrlEffectSaga);
 
         case 6:
           _context4.t2 = _context4.sent;

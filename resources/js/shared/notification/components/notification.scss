@@ -1,14 +1,24 @@
 .notification {
     background-color: #ff3f36;
-    padding: 10px;
+    margin: 5px;
     border-radius: 7px;
     max-width: 200px;
     position: relative;
-    right: -250px;
-    transition: right 0.5s;
+    transition: all 0.5s;
+    overflow: hidden;
 
     &__show {
+        max-height: 400px;
+        padding: 10px;
         right: 0;
+        opacity: 0.8;
+    }
+
+    &__hide {
+        max-height: 0;
+        padding: 0;
+        right: -260px;
+        opacity: 0;
     }
 }
 
@@ -18,4 +28,8 @@
     right: 10px;
 
     overflow: hidden;
+}
+
+.no-transition {
+    transition: none;
 }

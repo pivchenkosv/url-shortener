@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Url;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class UrlTest extends TestCase
